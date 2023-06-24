@@ -155,6 +155,7 @@ class _AdminPageState extends State<AdminPage> {
                                       right: width * 0.02,
                                     ),
                                     child: InternationalPhoneNumberInput(
+                                      inputBorder: InputBorder.none,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Required';

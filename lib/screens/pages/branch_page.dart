@@ -15,10 +15,6 @@ class _BranchPageState extends State<BranchPage> {
   TextEditingController nameControler = TextEditingController();
   TextEditingController addressController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  clearcontroller() {
-    nameControler.clear();
-    addressController.clear();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +115,6 @@ class _BranchPageState extends State<BranchPage> {
                                 obj.addBranchMethod(context, nameControler.text,
                                     addressController.text);
 
-                                clearcontroller();
                                 MyFlushBar.showSimpleFlushBar(
                                     "Added successfully",
                                     context,
