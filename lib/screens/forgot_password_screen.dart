@@ -1,4 +1,5 @@
 import 'package:admin_panel_so/utils/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ForgorPassScreen extends StatefulWidget {
@@ -11,6 +12,8 @@ class ForgorPassScreen extends StatefulWidget {
 class _ForgorPassScreenState extends State<ForgorPassScreen> {
   TextEditingController forgotEmailController = TextEditingController();
   TextEditingController forgotPassController = TextEditingController();
+  final auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -19,14 +22,38 @@ class _ForgorPassScreenState extends State<ForgorPassScreen> {
       body: Container(
         height: height,
         width: width,
-        decoration: const BoxDecoration(
-            // image: DecorationImage(
-            //     fit: BoxFit.cover,
-            //     image: AssetImage("assets/admin_panel_back.jpg"))
-            ),
-        child: Stack(
-          alignment: Alignment.center,
+        decoration: const BoxDecoration(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Container(
+              height: height * 0.15,
+              width: width * 0.2,
+              // color: Colors.amber,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage(
+                    'images/logo.png',
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: height * 0.05,
+              width: width * 0.2,
+              // color: Colors.amber,
+              child: Center(
+                child: Text(
+                  'Request New Password',
+                  style: TextStyle(
+                    fontSize: width * 0.015,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
             Card(
               elevation: 10,
               shape: RoundedRectangleBorder(

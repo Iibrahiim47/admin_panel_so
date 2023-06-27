@@ -36,9 +36,37 @@ class _AdminPannelLoginPageState extends State<AdminPannelLoginPage> {
             //     ),
             //   ),
             // ),
-            child: Stack(
-              alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Container(
+                  height: height * 0.15,
+                  width: width * 0.2,
+                  // color: Colors.amber,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage(
+                        'images/logo.png',
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: height * 0.05,
+                  width: width * 0.2,
+                  // color: Colors.amber,
+                  child: Center(
+                    child: Text(
+                      'Login To Your Account',
+                      style: TextStyle(
+                        fontSize: width * 0.015,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
                 Card(
                   elevation: 10,
                   shape: RoundedRectangleBorder(
