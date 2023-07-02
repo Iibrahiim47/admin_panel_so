@@ -88,9 +88,11 @@ class _AdminPannelLoginPageState extends State<AdminPannelLoginPage> {
                                   height: height * 0.07,
                                   width: width,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                          color: AdminTheme.primaryColor)),
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: AdminTheme.primaryColor,
+                                    ),
+                                  ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(

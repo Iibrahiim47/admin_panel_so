@@ -48,6 +48,9 @@ dependencies:
   intl_phone_number_input:
   image_picker:
   http: 
+  path:
+  dio: ^5.2.1+1
+  universal_io:
 
 dev_dependencies:
   flutter_test:

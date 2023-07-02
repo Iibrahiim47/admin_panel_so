@@ -15,6 +15,7 @@ class _BranchPageState extends State<BranchPage> {
   TextEditingController nameControler = TextEditingController();
   TextEditingController addressController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  bool isimageselected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +46,40 @@ class _BranchPageState extends State<BranchPage> {
                       ),
                       child: Row(
                         children: [
+                          isimageselected == false
+                              ? InkWell(
+                                  onTap: () {
+                                    obj.addBranchImage(context);
+                                  },
+                                  child: Container(
+                                    height: height,
+                                    width: width * 0.1,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(),
+                                    ),
+                                    child: const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.image),
+                                        Text("Select Image")
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  height: height,
+                                  width: width * 0.1,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      // image: DecorationImage(
+                                      //     fit: BoxFit.cover,
+                                      //     image: NetworkImage(obj.imageUrl!)),
+                                      border: Border.all()),
+                                ),
                           Expanded(
                             child: Container(
                               height: height,
@@ -112,8 +147,12 @@ class _BranchPageState extends State<BranchPage> {
                           InkWell(
                             onTap: () {
                               if (formKey.currentState!.validate()) {
-                                obj.addBranchMethod(context, nameControler.text,
-                                    addressController.text);
+                                BranchController.to.uploadFooterItem(
+                                  nameControler.text,
+                                  addressController.text,
+                                );
+                                // obj.addBranchMethod(context, nameControler.text,
+                                //     addressController.text);
 
                                 MyFlushBar.showSimpleFlushBar(
                                     "Added successfully",
