@@ -1,105 +1,127 @@
+// ignore_for_file: deprecated_member_use, prefer_typing_uninitialized_variables
+
+import 'dart:convert';
 import 'dart:io';
-import 'package:admin_panel_so/controller/admin_main_controller.dart';
 import 'package:admin_panel_so/models/branch_model.dart';
-import 'package:path/path.dart';
-import 'package:admin_panel_so/utils/flushbar.dart';
+import 'package:admin_panel_so/sub_admin/controller/sub_admin_profile_controller/sub_admin_profile_controller.dart';
+import 'package:admin_panel_so/sub_admin/model/get_category_model.dart';
 import 'package:admin_panel_so/utils/static.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:admin_panel_so/utils/static_data.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
+import 'package:path/path.dart';
 import 'package:dio/dio.dart' as deo;
+import 'package:http/http.dart' as http;
 
-class BranchController extends GetxController {
-  static BranchController get to => Get.find();
+class CategoryGetandPostController extends GetxController {
+  static CategoryGetandPostController get to => Get.find();
   var picker = ImagePicker();
   File? addImage;
-  var image;
+  bool isImageSelected = false;
+  http.Response? response;
+  PickedFile? image;
   String? fileName;
   List<BranchModel> allBranchesList = [];
+  int? categoryId;
+  int selectedCategoryType = 0;
+  String dropDownValue = "Food";
+  var typeList = ["Food", "Drinks"];
 
-  addBranchMethod(BuildContext context, String name, String address) async {
-    var now = DateTime.now();
-
-    String date = DateFormat.yMd().add_jm().format(now);
-
-    var uuid = const Uuid();
-    String id = uuid.v4();
-
-    BranchModel model = BranchModel(
-        addedBy: AdminMainController.to.adminName,
-        branchAddress: address,
-        branchId: id,
-        branchName: name,
-        dateTime: date);
-
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
-    await firebaseFirestore.collection("branches").doc(id).set(model.toMap());
-    // ignore: use_build_context_synchronously
-    MyFlushBar.showSimpleFlushBar(
-        'Inserted Successfully', context, Colors.green, Colors.white);
-    getMyBranchesListMethod();
-  }
-
-  Future<List<BranchModel>> getMyBranchesListMethod() async {
-    allBranchesList.clear();
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-    QuerySnapshot querySnapshot = await firestore.collection("branches").get();
-
-    for (var doc in querySnapshot.docs) {
-      allBranchesList
-          .add(BranchModel.fromMap(doc.data() as Map<String, dynamic>));
+  changeCatoryType(String value) {
+    print(value);
+    dropDownValue = value;
+    if (value == "Food") {
+      selectedCategoryType = 1;
+    } else {
+      selectedCategoryType = 2;
     }
-
+    print(selectedCategoryType);
     update();
-
-    return allBranchesList;
   }
 
-  Future addBranchImage(BuildContext context) async {
+  // changeSelectImageStatus(bool value) {
+  //   isImageSelected = value;
+  //   update();
+  // }
+
+  Future addCategoryImage(BuildContext context) async {
     image = await picker.getImage(source: ImageSource.gallery);
 
     update();
   }
 
   uploadFooterItem(
-    String bName,
-    String bAddress,
+    String arName,
+    String enName,
   ) async {
-    String result;
-    var now = DateTime.now();
+    var result;
 
-    String date = DateFormat.yMd().add_jm().format(now);
-    final bytes = await image.readAsBytes();
+    List<int> bytes = await image!.readAsBytes();
 
     try {
       deo.FormData data = deo.FormData.fromMap({
-        "branchName": bName,
-        "Branchimg": deo.MultipartFile.fromBytes(
+        "Image": deo.MultipartFile.fromBytes(
           bytes,
-          filename: basename(image.path),
+          filename: basename("${image!.path}.jpg"),
         ),
-        "branchAddress": bAddress,
-        "status": 0,
-        "CreatedDateTime": date
+        "ARName": arName,
+        "EngName": enName,
+        "CategoryType": selectedCategoryType,
+        "BranchId": SubAdminProfileController.to.branchId,
       });
-
+      print("data------${data.fields}");
       deo.Dio dio = deo.Dio();
-      var response = await dio.post(StaticValues.addBranch, data: data);
-      print(response.statusCode);
+      var response = await dio.post(
+        "https://api.socafe.cafe/api/Categories/AddCategory",
+        data: data,
+        options: Options(
+          headers: <String, String>{
+            "Content-type": "multipart/form-data",
+            "Authorization": "Bearer ${StaticData.token}"
+          },
+        ),
+      );
+
       result = response.data;
-      print(result);
+      print("result ------$result");
+      print("Exception = ${response.statusCode}");
       if (response.statusCode == 200) {
         if (response.data != null) {
-          print(".................${response.data}........");
+          getCatagoriesList();
         }
       }
       return response.data;
     } catch (e) {
       print("Exception = $e");
     }
+  }
+
+  //////////getbranches///////////
+
+  List<DataList> getCatagoriesListData = [];
+
+  Future<List<DataList>> getCatagoriesList() async {
+    getCatagoriesListData.clear();
+    print("${SubAdminProfileController.to.branchId}");
+    response = await http.get(
+      Uri.parse(
+          "${StaticValues.getAllCategoryUrl}${SubAdminProfileController.to.branchId}"),
+      headers: {
+        "Content-type": " application/json-patch+json",
+        "Authorization": " Bearer ${StaticData.token}"
+      },
+    );
+    print("ibra ${response!.statusCode}");
+    if (response!.statusCode == 200) {
+      var catData = GetCatagoryListModel.fromJson(jsonDecode(response!.body));
+      for (var u in catData.data!) {
+        getCatagoriesListData.add(u);
+      }
+
+      print("ibra $getCatagoriesListData");
+    }
+    return getCatagoriesListData;
   }
 }

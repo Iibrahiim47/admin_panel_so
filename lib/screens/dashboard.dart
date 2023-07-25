@@ -1,16 +1,13 @@
 import 'package:admin_panel_so/controller/admin_main_controller.dart';
-import 'package:admin_panel_so/controller/branch_controller.dart';
-import 'package:admin_panel_so/screens/login.dart';
+import 'package:admin_panel_so/controller/get_branch_controller/get_branch_controller.dart';
+import 'package:admin_panel_so/controller/get_users_profile_ontroller/get_user_profile_controller.dart';
 import 'package:admin_panel_so/screens/pages/admin_page.dart';
 import 'package:admin_panel_so/screens/pages/branch_page.dart';
-import 'package:admin_panel_so/screens/pages/category_page.dart';
 import 'package:admin_panel_so/screens/pages/home_page.dart';
 import 'package:admin_panel_so/screens/pages/menue_page.dart';
 import 'package:admin_panel_so/screens/pages/menue_setting.dart';
 import 'package:admin_panel_so/screens/pages/profile_page.dart';
-import 'package:admin_panel_so/utils/flushbar.dart';
 import 'package:admin_panel_so/utils/theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,17 +19,12 @@ class AdminDashBoard extends StatefulWidget {
 }
 
 class _AdminDashBoardState extends State<AdminDashBoard> {
-  Future<void> signOut() async {
-    await FirebaseAuth.instance.signOut();
-    Future.delayed(
-      const Duration(seconds: 2),
-      () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const AdminPannelLoginPage()));
-      },
-    );
+  @override
+  void initState() {
+    GetBranchListController.to.getBranchesMethod();
+    GetuserProfileController.to.getuserProfileMethod();
+    AdminMainController.to.getOwnerProfileMethod();
+    super.initState();
   }
 
   @override
@@ -41,7 +33,7 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: GetBuilder<AdminMainController>(initState: (state) {
-        BranchController.to.getMyBranchesListMethod();
+        // BranchController.to.getMyBranchesListMethod();
       }, builder: (obj) {
         return SizedBox(
           height: height,
@@ -636,15 +628,7 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: InkWell(
-                                  onTap: () {
-                                    signOut().then((value) {
-                                      MyFlushBar.showSimpleFlushBar(
-                                          "Logout successfully",
-                                          context,
-                                          Colors.green,
-                                          Colors.white);
-                                    });
-                                  },
+                                  onTap: () {},
                                   child: SizedBox(
                                     height: height * 0.07,
                                     width: width * 0.8,
@@ -688,15 +672,13 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
                                     ? const AdminPage()
                                     : obj.menue == "Branch"
                                         ? const BranchPage()
-                                        : obj.menue == "category"
-                                            ? const CategoryPage()
-                                            : obj.menue == "menue"
-                                                ? const MenuePage()
-                                                : obj.menue == "profile"
-                                                    ? const ProfilePage()
-                                                    : obj.menue == "settings"
-                                                        ? const MenueSettingPage()
-                                                        : const SizedBox(),
+                                        : obj.menue == "menue"
+                                            ? const MenuePage()
+                                            : obj.menue == "profile"
+                                                ? const ProfilePage()
+                                                : obj.menue == "settings"
+                                                    ? const MenueSettingPage()
+                                                    : const SizedBox(),
                           ),
                         )
                       ],

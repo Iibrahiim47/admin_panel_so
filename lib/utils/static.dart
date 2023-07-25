@@ -1,21 +1,22 @@
 class StaticValues {
-  static const baseUrl = 'http://194.60.201.168:1111/';
+  static const baseUrl = 'https://api.socafe.cafe/api/';
+  static const imageUrl = 'https://api.socafe.cafe';
+
   static int? id;
-  static const userSignUpUrl =
-      '${StaticValues.baseUrl}api/AdminRegistration/InsertAdmin';
-  // static const userLoginUrl = '${StaticValues.baseUrl}api/Registration/Login';
-  // static const userEmailVeriyUrl =
-  //     '${StaticValues.baseUrl}api/Registration/VerifyEmail';
-  // static const forgetPassUrl =
-  //     '${StaticValues.baseUrl}api/Registration/newPassword';
-  // static const changePassUrl =
-  //     '${StaticValues.baseUrl}api/Registration/PasswordChange';
-  // static const getProfilUrl = '${StaticValues.baseUrl}api/Registration/Profile';
-  static const addBranch =
-      '${StaticValues.baseUrl}api/BranchController/FileUpload';
-  // static const getAllPostUrl = '${StaticValues.baseUrl}api/Postandadd/allPosts';
-  // static const getMyAllPostUrl =
-  //     '${StaticValues.baseUrl}api/Postandadd/MyallPosts';
-  // static const editProfileUrl =
-  //     '${StaticValues.baseUrl}api/EditProfile/ProfileEdit';
+  static const userSignUpUrl = '${StaticValues.baseUrl}UserApi/RegsiterUser';
+  static const userLoginUrl = '${StaticValues.baseUrl}UserApi/UserLogin';
+  static const addBranchUrl = '${StaticValues.baseUrl}Branch/AddBranch';
+  static const getBranchUrl = '${StaticValues.baseUrl}Branch/GetBranches';
+  static const getUserUrl = '${StaticValues.baseUrl}UserApi/GetUsers';
+  static const getusersProfilUrl = '${StaticValues.baseUrl}UserApi/UserProfile';
+  static const addCategoryUrl = '${StaticValues.baseUrl}Categories/AddCategory';
+  static const getAllCategoryUrl =
+      '${StaticValues.baseUrl}Categories/GetCategories/';
+  static const addProductUrl = '${StaticValues.baseUrl}Product/AddProduct';
+  static const getOwnerUrl = '${StaticValues.baseUrl}UserApi/OwnerProfile';
+  static const addSliderUrl = '${StaticValues.baseUrl}Slider/AddSlider/';
+  static const getSliderUrl = '${StaticValues.baseUrl}Slider/GetSlider/';
+  static const getproducteUrl = '${StaticValues.baseUrl}Product/GetProduct/';
+  static const getFeedbackUrl = '${StaticValues.baseUrl}Feedback/GetFeedbacks/';
+  static const deleteSliderUrl = '${StaticValues.baseUrl}Slider/DeleteSlider/';
 }

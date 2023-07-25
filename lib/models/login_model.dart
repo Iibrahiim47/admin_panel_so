@@ -51,3 +51,63 @@ class LoginReqModel {
   @override
   int get hashCode => email.hashCode ^ password.hashCode;
 }
+
+class LoginResponse {
+  String? status;
+  String? data;
+  bool? isAdmin;
+  LoginResponse({
+    this.status,
+    this.data,
+    this.isAdmin,
+  });
+
+  LoginResponse copyWith({
+    String? status,
+    String? data,
+    bool? isAdmin,
+  }) {
+    return LoginResponse(
+      status: status ?? this.status,
+      data: data ?? this.data,
+      isAdmin: isAdmin ?? this.isAdmin,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'status': status,
+      'data': data,
+      'isAdmin': isAdmin,
+    };
+  }
+
+  factory LoginResponse.fromMap(Map<String, dynamic> map) {
+    return LoginResponse(
+      status: map['status'] != null ? map['status'] as String : null,
+      data: map['data'] != null ? map['data'] as String : null,
+      isAdmin: map['isAdmin'] != null ? map['isAdmin'] as bool : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory LoginResponse.fromJson(String source) =>
+      LoginResponse.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() =>
+      'LoginResponse(status: $status, data: $data, isAdmin: $isAdmin)';
+
+  @override
+  bool operator ==(covariant LoginResponse other) {
+    if (identical(this, other)) return true;
+
+    return other.status == status &&
+        other.data == data &&
+        other.isAdmin == isAdmin;
+  }
+
+  @override
+  int get hashCode => status.hashCode ^ data.hashCode ^ isAdmin.hashCode;
+}

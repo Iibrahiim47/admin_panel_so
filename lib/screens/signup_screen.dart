@@ -2,8 +2,6 @@
 
 import 'package:admin_panel_so/controller/absecureController.dart';
 import 'package:admin_panel_so/controller/admin_main_controller.dart';
-import 'package:admin_panel_so/controller/signup_controller/signup_controller.dart';
-import 'package:admin_panel_so/models/signup_model.dart';
 import 'package:admin_panel_so/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -299,25 +297,25 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: InkWell(
                                   onTap: () {
                                     if (_formKey.currentState!.validate()) {
-                                      SignupResponseModel model =
-                                          SignupResponseModel(
-                                              adminName:
-                                                  signupfullnameController.text,
-                                              email: signupEmailController.text,
-                                              mobileNumber:
-                                                  signupcontactnumController
-                                                      .text,
-                                              password:
-                                                  signupPassController.text,
-                                              status: 0,
-                                              registerdateTime:
-                                                  "2023-07-01T19:20:49");
-                                      SignUpController.to
-                                          .userSignUPMethiod(model)
-                                          .then((value) => {
-                                                if (value.adminId != null)
-                                                  {print(value.toMap())}
-                                              });
+                                      // SignupResponseModel model =
+                                      //     SignupResponseModel(
+                                      //         adminName:
+                                      //             signupfullnameController.text,
+                                      //         email: signupEmailController.text,
+                                      //         mobileNumber:
+                                      //             signupcontactnumController
+                                      //                 .text,
+                                      //         password:
+                                      //             signupPassController.text,
+                                      //         status: 0,
+                                      //         registerdateTime:
+                                      //             "2023-07-01T19:20:49");
+                                      // SignUpController.to
+                                      //     .userSignUPMethiod(model)
+                                      //     .then((value) => {
+                                      //           if (value.adminId != null)
+                                      //             {print(value.toMap())}
+                                      //         });
                                       //   MyFlushBar.showSimpleFlushBar(
                                       //       "Fill All the fields",
                                       //       context,

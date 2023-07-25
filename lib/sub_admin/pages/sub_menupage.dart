@@ -8,22 +8,22 @@ import 'package:admin_panel_so/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MenuePage extends StatefulWidget {
-  const MenuePage({super.key});
+class SubMenuePage extends StatefulWidget {
+  const SubMenuePage({super.key});
 
   @override
-  State<MenuePage> createState() => _MenuePageState();
+  State<SubMenuePage> createState() => _SubMenuePageState();
 }
 
-class _MenuePageState extends State<MenuePage> {
+class _SubMenuePageState extends State<SubMenuePage> {
   final formKey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController();
+  TextEditingController engnameController = TextEditingController();
   TextEditingController arabicNameController = TextEditingController();
   TextEditingController descriptopnController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   List<DropdownMenuItem<DataList>> categorydropdownMenuItems = [];
   clearcontroller() {
-    nameController.clear();
+    engnameController.clear();
     arabicNameController.clear();
     descriptopnController.clear();
     priceController.clear();
@@ -34,6 +34,8 @@ class _MenuePageState extends State<MenuePage> {
   void initState() {
     getData();
 
+    print("product list is ${MenuContreoller.to.getProductListData.length}");
+    // MenuContreoller.to.getProductList();
     super.initState();
   }
 
@@ -86,10 +88,10 @@ class _MenuePageState extends State<MenuePage> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                obj.isImageSelected == false
+                                obj.addImage == null
                                     ? InkWell(
                                         onTap: () {
-                                          // obj.getFromGallery(context);
+                                          obj.addProductImage(context);
                                         },
                                         child: Container(
                                           height: height,
@@ -120,7 +122,7 @@ class _MenuePageState extends State<MenuePage> {
                                             image: DecorationImage(
                                                 fit: BoxFit.cover,
                                                 image: NetworkImage(
-                                                    obj.imageUrl!)),
+                                                    obj.image!.path)),
                                             border: Border.all()),
                                       ),
                                 SizedBox(
@@ -155,15 +157,15 @@ class _MenuePageState extends State<MenuePage> {
                                                         left: width * 0.02,
                                                       ),
                                                       child: TextFormField(
-                                                        // validator: (value) {
-                                                        //   if (value == null ||
-                                                        //       value.isEmpty) {
-                                                        //     return 'Required';
-                                                        //   }
-                                                        //   return null;
-                                                        // },
+                                                        validator: (value) {
+                                                          if (value == null ||
+                                                              value.isEmpty) {
+                                                            return 'Required';
+                                                          }
+                                                          return null;
+                                                        },
                                                         controller:
-                                                            nameController,
+                                                            engnameController,
                                                         decoration:
                                                             const InputDecoration(
                                                                 border:
@@ -196,13 +198,13 @@ class _MenuePageState extends State<MenuePage> {
                                                         left: width * 0.02,
                                                       ),
                                                       child: TextFormField(
-                                                        // validator: (value) {
-                                                        //   if (value == null ||
-                                                        //       value.isEmpty) {
-                                                        //     return 'Required';
-                                                        //   }
-                                                        //   return null;
-                                                        // },
+                                                        validator: (value) {
+                                                          if (value == null ||
+                                                              value.isEmpty) {
+                                                            return 'Required';
+                                                          }
+                                                          return null;
+                                                        },
                                                         controller:
                                                             arabicNameController,
                                                         decoration:
@@ -300,16 +302,16 @@ class _MenuePageState extends State<MenuePage> {
                                                               ),
                                                               child:
                                                                   TextFormField(
-                                                                // validator:
-                                                                //     (value) {
-                                                                //   if (value ==
-                                                                //           null ||
-                                                                //       value
-                                                                //           .isEmpty) {
-                                                                //     return 'Required';
-                                                                //   }
-                                                                //   return null;
-                                                                // },
+                                                                validator:
+                                                                    (value) {
+                                                                  if (value ==
+                                                                          null ||
+                                                                      value
+                                                                          .isEmpty) {
+                                                                    return 'Required';
+                                                                  }
+                                                                  return null;
+                                                                },
                                                                 controller:
                                                                     priceController,
                                                                 decoration: const InputDecoration(
@@ -397,17 +399,15 @@ class _MenuePageState extends State<MenuePage> {
                               left: width * 0.2,
                               right: width * 0.2,
                             ),
-                            child: InkWell(
+                            child: GestureDetector(
                               onTap: () {
                                 if (formKey.currentState!.validate()) {
-                                  // obj.addMenueMethod(
-                                  //     context,
-                                  //     nameController.text,
-                                  //     arabicNameController.text,
-                                  //     obj.imageUrl!,
-                                  //     descriptopnController.text,
-                                  //     obj.selectedCategoryName!,
-                                  //     priceController.text);
+                                  obj.addProductItem(
+                                      arabicNameController.text,
+                                      engnameController.text,
+                                      descriptopnController.text,
+                                      priceController.text);
+
                                   clearcontroller();
                                   MyFlushBar.showSimpleFlushBar(
                                       "Added successfully",
@@ -450,148 +450,31 @@ class _MenuePageState extends State<MenuePage> {
                     height: height,
                     width: width,
                     // color: Colors.amber,
-                    child: obj.allMenueList.isEmpty
-                        ? const Center(child: Text("No Products found"))
-                        : GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                            ),
-                            itemCount: obj.allMenueList.length,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: height * 0.1,
+                          width: width,
+                          child: ListView.builder(
+                            itemCount: CategoryGetandPostController
+                                .to.getCatagoriesListData.length,
+                            scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Card(
-                                  elevation: 10,
-                                  shadowColor: AdminTheme.primaryColor,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: SizedBox(
-                                    height: height * 0.25,
-                                    width: width,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                        left: width * 0.01,
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: height * 0.01,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Container(
-                                                height: height * 0.1,
-                                                width: width * 0.1,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    image: DecorationImage(
-                                                        fit: BoxFit.cover,
-                                                        image: NetworkImage(obj
-                                                            .allMenueList[index]
-                                                            .image!)),
-                                                    border: Border.all()),
-                                              ),
-                                              SizedBox(
-                                                width: width * 0.03,
-                                                height: height * 0.06,
-                                                // color: Colors.amber,
-                                                child: Center(
-                                                  child: PopupMenuButton(
-                                                    offset: const Offset(0, 60),
-
-                                                    ///here
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
-                                                    icon: const Icon(
-                                                        Icons.more_vert),
-                                                    itemBuilder:
-                                                        (BuildContext context) {
-                                                      return {
-                                                        'Update',
-                                                        'Delete'
-                                                      }.map((String choice) {
-                                                        return PopupMenuItem<
-                                                            String>(
-                                                          value: choice,
-                                                          child: Text(choice),
-                                                        );
-                                                      }).toList();
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              height: height,
-                                              width: width,
-                                              child: Text(
-                                                obj.allMenueList[index].name!,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: SizedBox(
-                                              height: height,
-                                              width: width,
-                                              child: const Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Date Time: ",
-                                                    maxLines: 2,
-                                                    style: TextStyle(
-                                                        color: AdminTheme
-                                                            .primaryColor),
-                                                  ),
-                                                  // Text(
-                                                  //   obj.allMenueList[index]
-                                                  //       .dateTime!
-                                                  //       .toString(),
-                                                  // ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: SizedBox(
-                                              height: height,
-                                              width: width,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const Text(
-                                                    "Address: ",
-                                                    style: TextStyle(
-                                                        color: AdminTheme
-                                                            .primaryColor),
-                                                  ),
-                                                  Text(
-                                                    obj.allMenueList[index]
-                                                        .arabicName!,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                child: InkWell(
+                                  onTap: () {
+                                    obj.getProductList();
+                                  },
+                                  child: Card(
+                                    elevation: 10,
+                                    shadowColor: AdminTheme.primaryColor,
+                                    child: SizedBox(
+                                      height: height,
+                                      width: width * 0.1,
+                                      child: Center(
+                                        child: Text(
+                                            "${CategoryGetandPostController.to.getCatagoriesListData[index].araName}"),
                                       ),
                                     ),
                                   ),
@@ -599,6 +482,40 @@ class _MenuePageState extends State<MenuePage> {
                               );
                             },
                           ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: height,
+                            width: width,
+                            color: Colors.amber,
+                            child: GridView.builder(
+                              itemCount: obj.getProductListData.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 8),
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: height * 0.1,
+                                    width: width * 0.4,
+                                    color: Colors.red,
+                                    child: Text(
+                                      '${obj.getProductListData[index].araName}  ${obj.getProductListData[index].engName}',
+                                      style: TextStyle(
+                                        fontSize: width * 0.025,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],

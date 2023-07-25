@@ -1,5 +1,4 @@
 import 'package:admin_panel_so/utils/theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ForgorPassScreen extends StatefulWidget {
@@ -12,7 +11,6 @@ class ForgorPassScreen extends StatefulWidget {
 class _ForgorPassScreenState extends State<ForgorPassScreen> {
   TextEditingController forgotEmailController = TextEditingController();
   TextEditingController forgotPassController = TextEditingController();
-  final auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
